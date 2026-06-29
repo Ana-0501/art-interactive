@@ -18,6 +18,50 @@ let sourceCtx = sourceCanvas.getContext('2d');
 let outputCtx = outputCanvas.getContext('2d');
 let currentEffect = null;
 let processingTimer = null;
+let sampleImages = [];
+
+// ===== Sample Images =====
+function initSamples() {
+  sampleImages = SampleImages.generateAll();
+  const grid = document.getElementById('samples-grid');
+
+  for (const sample of sampleImages) {
+    const card = document.createElement('div');
+    card.className = 'sample-card';
+    card.dataset.sampleId = sample.id;
+
+    const img = document.createElement('img');
+    img.src = sample.dataUrl;
+    img.alt = sample.label;
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = sample.label;
+
+    card.appendChild(img);
+    card.appendChild(label);
+    card.addEventListener('click', () => loadSample(sample));
+    grid.appendChild(card);
+  }
+}
+
+function loadSample(sample) {
+  const img = new Image();
+  img.onload = () => {
+    let w = img.width, h = img.height;
+    if (w > MAX_DIM || h > MAX_DIM) {
+      const ratio = MAX_DIM / Math.max(w, h);
+      w = Math.floor(w * ratio);
+      h = Math.floor(h * ratio);
+    }
+    sourceCanvas.width = w;
+    sourceCanvas.height = h;
+    sourceCtx.drawImage(img, 0, 0, w, h);
+    sourceImage = { w, h };
+    showControls();
+  };
+  img.src = sample.dataUrl;
+}
 
 // ===== Upload =====
 uploadZone.addEventListener('click', () => fileInput.click());
@@ -34,6 +78,19 @@ fileInput.addEventListener('change', e => {
   if (file) loadImage(file);
 });
 
+function showControls() {
+  uploadZone.style.display = 'none';
+  controls.style.display = 'block';
+  document.body.classList.add('has-image');
+  outputCanvas.style.display = 'none';
+  placeholder.style.display = 'block';
+  downloadBtn.disabled = true;
+  document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+  currentEffect = null;
+  outputCanvas.width = 0;
+  outputCanvas.height = 0;
+}
+
 function loadImage(file) {
   if (!file.type.startsWith('image/')) { alert('请选择图片文件'); return; }
 
@@ -41,7 +98,6 @@ function loadImage(file) {
   reader.onload = e => {
     const img = new Image();
     img.onload = () => {
-      // 缩放到合理尺寸
       let w = img.width, h = img.height;
       if (w > MAX_DIM || h > MAX_DIM) {
         const ratio = MAX_DIM / Math.max(w, h);
@@ -52,19 +108,7 @@ function loadImage(file) {
       sourceCanvas.height = h;
       sourceCtx.drawImage(img, 0, 0, w, h);
       sourceImage = { w, h };
-
-      // 隐藏上传区，显示控制面板
-      uploadZone.style.display = 'none';
-      controls.style.display = 'block';
-
-      // 重置
-      currentEffect = null;
-      outputCanvas.style.display = 'none';
-      placeholder.style.display = 'block';
-      downloadBtn.disabled = true;
-      document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
-      outputCanvas.width = 0;
-      outputCanvas.height = 0;
+      showControls();
     };
     img.src = e.target.result;
   };
@@ -132,6 +176,7 @@ downloadBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => {
   sourceImage = null;
   currentEffect = null;
+  document.body.classList.remove('has-image');
   uploadZone.style.display = '';
   controls.style.display = 'none';
   outputCanvas.style.display = 'none';
@@ -144,3 +189,6 @@ resetBtn.addEventListener('click', () => {
   outputCanvas.width = 0;
   outputCanvas.height = 0;
 });
+
+// ===== 启动 =====
+initSamples();
