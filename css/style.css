@@ -1,0 +1,43 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  overflow: hidden;
+  background: #f5f0eb;
+  font-family: 'Georgia', 'Noto Serif SC', 'STSong', serif;
+  cursor: crosshair;
+}
+
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#ui {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.7;
+  transition: opacity 0.6s;
+}
+
+#ui:hover { opacity: 0.95; }
+
+#ui h1 {
+  font-size: 1.6rem;
+  font-weight: normal;
+  color: #6b5e53;
+  letter-spacing: 0.3em;
+  margin-bottom: 4px;
+}
+
+#ui .hint {
+  font-size: 0.75rem;
+  color: #a89888;
+  letter-spacing: 0.15em;
+}
