@@ -5,6 +5,8 @@ const fileInput = document.getElementById('file-input');
 const controls = document.getElementById('controls');
 const effectButtons = document.getElementById('effect-buttons');
 const outputCanvas = document.getElementById('output-canvas');
+const originalCanvas = document.getElementById('original-canvas');
+const canvasPair = document.getElementById('canvas-pair');
 const placeholder = document.getElementById('placeholder');
 const intensitySlider = document.getElementById('intensity');
 const intensityVal = document.getElementById('intensity-val');
@@ -16,6 +18,7 @@ let sourceImage = null;
 let sourceCanvas = document.createElement('canvas');
 let sourceCtx = sourceCanvas.getContext('2d');
 let outputCtx = outputCanvas.getContext('2d');
+let originalCtx = originalCanvas.getContext('2d');
 let currentEffect = null;
 let processingTimer = null;
 let sampleImages = [];
@@ -82,13 +85,15 @@ function showControls() {
   uploadZone.style.display = 'none';
   controls.style.display = 'block';
   document.body.classList.add('has-image');
-  outputCanvas.style.display = 'none';
+  canvasPair.style.display = 'none';
   placeholder.style.display = 'block';
   downloadBtn.disabled = true;
   document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
   currentEffect = null;
   outputCanvas.width = 0;
   outputCanvas.height = 0;
+  originalCanvas.width = 0;
+  originalCanvas.height = 0;
 }
 
 function loadImage(file) {
@@ -142,9 +147,17 @@ function processImage() {
   if (!sourceImage || !currentEffect) return;
 
   const { w, h } = sourceImage;
+
+  // 原图画布
+  originalCanvas.width = w;
+  originalCanvas.height = h;
+  originalCtx.drawImage(sourceCanvas, 0, 0);
+
+  // 效果画布
   outputCanvas.width = w;
   outputCanvas.height = h;
-  outputCanvas.style.display = 'block';
+
+  canvasPair.style.display = 'flex';
   placeholder.style.display = 'none';
 
   const intensity = intensitySlider.value / 100;
@@ -179,7 +192,7 @@ resetBtn.addEventListener('click', () => {
   document.body.classList.remove('has-image');
   uploadZone.style.display = '';
   controls.style.display = 'none';
-  outputCanvas.style.display = 'none';
+  canvasPair.style.display = 'none';
   placeholder.style.display = 'block';
   downloadBtn.disabled = true;
   document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
@@ -188,6 +201,8 @@ resetBtn.addEventListener('click', () => {
   fileInput.value = '';
   outputCanvas.width = 0;
   outputCanvas.height = 0;
+  originalCanvas.width = 0;
+  originalCanvas.height = 0;
 });
 
 // ===== 启动 =====

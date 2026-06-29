@@ -43,7 +43,16 @@
     </div>
 
     <div id="result-area">
-      <canvas id="output-canvas"></canvas>
+      <div class="canvas-pair" id="canvas-pair" style="display:none">
+        <div class="canvas-box">
+          <span class="canvas-label">原图</span>
+          <canvas id="original-canvas"></canvas>
+        </div>
+        <div class="canvas-box">
+          <span class="canvas-label">效果</span>
+          <canvas id="output-canvas"></canvas>
+        </div>
+      </div>
       <div id="placeholder">选择效果开始处理</div>
     </div>
 
