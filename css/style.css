@@ -73,9 +73,9 @@ header .sub {
   margin-bottom: 16px;
 }
 .effect-btn {
-  flex: 1 1 calc(16.66% - 8px);
-  min-width: 90px;
-  max-width: 130px;
+  flex: 1 1 calc(33.33% - 8px);
+  min-width: 100px;
+  max-width: 180px;
   padding: 10px 6px;
   border: 1px solid #333;
   border-radius: 10px;
