@@ -3,19 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>极简几何 — Minimal Geometry</title>
+  <title>ArtFilter — 图像艺术处理</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <canvas id="canvas"></canvas>
-  <div id="ui">
-    <h1>极简几何</h1>
-    <p class="hint">悬停变化 · 点击切换 · 莫兰迪色系</p>
+  <header>
+    <h1>ArtFilter</h1>
+    <span class="sub">图像艺术处理</span>
+  </header>
+
+  <div id="upload-zone">
+    <div class="upload-icon">+</div>
+    <p>拖放图片到此处，或 <span>点击选择</span></p>
+    <input type="file" id="file-input" accept="image/*" hidden>
   </div>
-  <script src="js/easing.js"></script>
-  <script src="js/palette.js"></script>
-  <script src="js/geometry.js"></script>
-  <script src="js/particles.js"></script>
+
+  <div id="controls" style="display:none">
+    <div class="effect-row" id="effect-buttons">
+      <button data-effect="pointillism" class="effect-btn">
+        <span class="icon">🔴</span>点彩重构
+      </button>
+      <button data-effect="geometric" class="effect-btn">
+        <span class="icon">🔷</span>几何解构
+      </button>
+      <button data-effect="ink" class="effect-btn">
+        <span class="icon">🖋️</span>水墨轮廓
+      </button>
+      <button data-effect="pixel" class="effect-btn">
+        <span class="icon">👾</span>像素复古
+      </button>
+      <button data-effect="halftone" class="effect-btn">
+        <span class="icon">🟡</span>波普网点
+      </button>
+      <button data-effect="isolate" class="effect-btn">
+        <span class="icon">🎨</span>色彩抽离
+      </button>
+    </div>
+
+    <div class="slider-row">
+      <label>强度</label>
+      <input type="range" id="intensity" min="1" max="100" value="50">
+      <span id="intensity-val">50</span>
+    </div>
+
+    <div id="result-area">
+      <canvas id="output-canvas"></canvas>
+      <div id="placeholder">选择效果开始处理</div>
+    </div>
+
+    <div class="action-row">
+      <button id="download-btn" disabled>⬇ 导出图片</button>
+      <button id="reset-btn">↺ 重新上传</button>
+    </div>
+  </div>
+
+  <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

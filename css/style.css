@@ -1,43 +1,194 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  overflow: hidden;
-  background: #f5f0eb;
-  font-family: 'Georgia', 'Noto Serif SC', 'STSong', serif;
-  cursor: crosshair;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #1a1a1e;
+  color: #e0e0e0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-
-#ui {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
+header {
   text-align: center;
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0.7;
-  transition: opacity 0.6s;
+  padding: 24px 0 12px;
 }
-
-#ui:hover { opacity: 0.95; }
-
-#ui h1 {
+header h1 {
   font-size: 1.6rem;
-  font-weight: normal;
-  color: #6b5e53;
-  letter-spacing: 0.3em;
-  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #f0f0f0;
+}
+header .sub {
+  font-size: 0.8rem;
+  color: #888;
+  letter-spacing: 0.2em;
 }
 
-#ui .hint {
-  font-size: 0.75rem;
-  color: #a89888;
-  letter-spacing: 0.15em;
+/* ===== Upload Zone ===== */
+#upload-zone {
+  width: 90%;
+  max-width: 600px;
+  border: 2px dashed #444;
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+  margin: 12px 0;
+}
+#upload-zone:hover, #upload-zone.drag-over {
+  border-color: #8ab4f8;
+  background: rgba(138,180,248,0.06);
+}
+.upload-icon {
+  font-size: 2.5rem;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 200;
+}
+#upload-zone p {
+  color: #777;
+  font-size: 0.9rem;
+}
+#upload-zone p span {
+  color: #8ab4f8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ===== Controls (hidden until image loaded) ===== */
+#controls {
+  width: 90%;
+  max-width: 800px;
+}
+
+/* Effect buttons */
+.effect-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.effect-btn {
+  flex: 1 1 calc(16.66% - 8px);
+  min-width: 90px;
+  max-width: 130px;
+  padding: 10px 6px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  background: #222;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.effect-btn:hover {
+  background: #2a2a2a;
+  border-color: #555;
+  color: #ddd;
+}
+.effect-btn.active {
+  background: #2a3a50;
+  border-color: #8ab4f8;
+  color: #8ab4f8;
+}
+.effect-btn .icon {
+  font-size: 1.3rem;
+}
+
+/* Slider */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.slider-row label {
+  font-size: 0.85rem;
+  color: #888;
+}
+#intensity {
+  width: 180px;
+  accent-color: #8ab4f8;
+}
+#intensity-val {
+  font-size: 0.85rem;
+  color: #8ab4f8;
+  min-width: 24px;
+}
+
+/* Result area */
+#result-area {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  background: #111;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#output-canvas {
+  max-width: 100%;
+  max-height: 65vh;
+  display: none;
+}
+#placeholder {
+  color: #444;
+  font-size: 0.9rem;
+}
+
+/* Action row */
+.action-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0 32px;
+}
+#download-btn, #reset-btn {
+  padding: 10px 28px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #222;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+#download-btn:hover:not(:disabled), #reset-btn:hover {
+  background: #2a2a2a;
+  border-color: #666;
+}
+#download-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+#download-btn:not(:disabled) {
+  border-color: #4a8;
+  color: #4a8;
+}
+#download-btn:not(:disabled):hover {
+  background: #1a2a1a;
+}
+
+/* Loading overlay */
+#loading {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #aaa;
+  border-radius: 12px;
 }
